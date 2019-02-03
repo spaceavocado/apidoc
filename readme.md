@@ -20,8 +20,6 @@
   - [Summary](#summary)
   - [Examples](#examples)
   - [Getting Started](#getting-started)
-    - [Install and Run the Compiled APIDoc](#install-and-run-the-compiled-apidoc)
-    - [Run the APIDoc from the Source Code](#run-the-apidoc-from-the-source-code)
 - [API Annotation in Comments](#api-annotation-in-comments)
   - [Main Section](#main-section)
     - [Supported Tags](#supported-tags)
@@ -70,26 +68,13 @@ The generator is also able to read [gorilla/mux](https://github.com/gorilla/mux)
 
 ## Getting Started
 1. Add annotation into your API source code files, [See API Annotation in Comments](#api-annotation-in-comments).
+   
 2. Get the APIDoc by using:
     ```sh
     go get -u github.com/spaceavocado/apidoc
     ```
-3. Run [the compiled APIDoc](#install-and-run-the-compiled-apidoc) or run [the APIDoc from source](#run-the-apidoc-from-the-source-code).
-4. Run `apidoc` in the your project's root folder. This will extract and process your annotation and it generates the output YAML file.
-    ```sh
-    apidoc -m main.go -e handler -o docs/api
-    ```
-    *Note*: the example shows the default flag values, for more details, [See APIDoc CLI](#apidoc-cli).
+    > This will create a binary in your **$GOPATH/bin** folder called `apidoc` (Mac/Unix) or `apidoc.exe` (Windows).
 
-5. Preview the documentation in the [Swagger Editor](https://editor.swagger.io/), i.e. put the openapi.yaml content into the editor.
-
-### Install and Run the Compiled APIDoc
-1. Go into `$GOPATH/src/github.com/spaceavocado/apidoc/` folder.
-2. Run the go install command:
-    ```sh
-    go install
-    ```
-   > This will create a binary in your **$GOPATH/bin** folder called `apidoc` (Mac/Unix) or `apidoc.exe` (Windows).
 3. Now you can run `apidoc` command from your shell.
    > Make sure that **$GOPATH/bin** is in your Environment Variables:
     - **Linux**:
@@ -100,15 +85,13 @@ The generator is also able to read [gorilla/mux](https://github.com/gorilla/mux)
 
     - **Windows**: "Control Panel" > "System" > "Edit the system environment variables" > "Advanced" > "Environment Variables" > "Path" > "Edit". and add the directory.
 
-### Run the APIDoc from the Source Code
-The APIDoc could be run directly from the source code:
-1. Go into `$GOPATH/src/github.com/spaceavocado/apidoc/` folder.
-2. And run 
-   ```sh
-   go run main.go [flags]
-   ```
-    For more info [See APIDoc CLI](#apidoc-cli).
+4. Run `apidoc` in the your project's root folder. This will extract and process your annotation and it generates the output YAML file.
+    ```sh
+    apidoc -m main.go -e handler -o docs/api
+    ```
+    *Note*: the example shows the default flag values, for more details, [See APIDoc CLI](#apidoc-cli).
 
+5. Preview the documentation in the [Swagger Editor](https://editor.swagger.io/), i.e. put the openapi.yaml content into the editor.
 
 # API Annotation in Comments
 An API annotation is represented as an code comment starting with **@** symbol followed by documentation tag and it value or parameters. Examples:
