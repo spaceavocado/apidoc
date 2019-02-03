@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/spaceavocado/apidoc/token"
 	log "github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
+	"github.com/spaceavocado/apidoc/token"
 )
 
 func TestGenerate(t *testing.T) {
@@ -35,8 +35,8 @@ func TestGenerate(t *testing.T) {
 
 	// Invalid output folder
 	err = g.Generate(
-		[]token.Token{token.Token{}},
-		[][]token.Token{[]token.Token{token.Token{}}},
+		[]token.Token{{}},
+		[][]token.Token{{{}}},
 		"invalid|folder/file.go")
 	if err == nil {
 		t.Errorf("Expected error, got nil")
@@ -44,8 +44,8 @@ func TestGenerate(t *testing.T) {
 
 	// Invalid file
 	err = g.Generate(
-		[]token.Token{token.Token{}},
-		[][]token.Token{[]token.Token{token.Token{}}},
+		[]token.Token{{}},
+		[][]token.Token{{{}}},
 		"|.go")
 	if err == nil {
 		t.Errorf("Expected error, got nil")
@@ -55,14 +55,14 @@ func TestGenerate(t *testing.T) {
 	g.buffer.Clear()
 	g.Generate(
 		[]token.Token{
-			token.Token{
+			{
 				Key:  "ver",
 				Meta: map[string]string{"value": "1.0"},
 			},
 		},
 		[][]token.Token{
-			[]token.Token{
-				token.Token{
+			{
+				{
 					Key:  "param",
 					Meta: map[string]string{"type": "{object}"},
 				},
@@ -83,7 +83,7 @@ func TestGenerate(t *testing.T) {
 
 	// Components
 	g.compCache = map[string][]string{
-		"github.com/pkg.Peter": []string{
+		"github.com/pkg.Peter": {
 			"Peter:\n",
 			"  type: object\n",
 			"  properties:\n",
@@ -93,14 +93,14 @@ func TestGenerate(t *testing.T) {
 	}
 	g.Generate(
 		[]token.Token{
-			token.Token{
+			{
 				Key:  "ver",
 				Meta: map[string]string{"value": "1.0"},
 			},
 		},
 		[][]token.Token{
-			[]token.Token{
-				token.Token{},
+			{
+				{},
 			},
 		},
 		file)
@@ -127,54 +127,54 @@ func TestGenerate(t *testing.T) {
 	g.compCache = make(map[string][]string, 0)
 	g.Generate(
 		[]token.Token{
-			token.Token{},
+			{},
 		},
 		[][]token.Token{
-			[]token.Token{
-				token.Token{
+			{
+				{
 					Key: "summary",
 					Meta: map[string]string{
 						"value": "sample",
 					},
 				},
-				token.Token{
+				{
 					Key: "id",
 					Meta: map[string]string{
 						"value": "action-id",
 					},
 				},
-				token.Token{
+				{
 					Key: "desc",
 					Meta: map[string]string{
 						"value": "lorem",
 					},
 				},
-				token.Token{
+				{
 					Key: "tag",
 					Meta: map[string]string{
 						"value": "Dolor",
 					},
 				},
-				token.Token{
+				{
 					Key: "router",
 					Meta: map[string]string{
 						"url":    "/sample",
 						"method": "[get]",
 					},
 				},
-				token.Token{
+				{
 					Key: "produce",
 					Meta: map[string]string{
 						"value": "json",
 					},
 				},
-				token.Token{
+				{
 					Key: "body",
 					Meta: map[string]string{
 						"value": "github.com/pkg.Peter",
 					},
 				},
-				token.Token{
+				{
 					Key: "bref",
 					Meta: map[string]string{
 						"pkg.type": "github.com/pkg.Peter",
@@ -184,13 +184,13 @@ func TestGenerate(t *testing.T) {
 						"desc":     "Name",
 					},
 				},
-				token.Token{
+				{
 					Key: "accept",
 					Meta: map[string]string{
 						"value": "json",
 					},
 				},
-				token.Token{
+				{
 					Key: "success",
 					Meta: map[string]string{
 						"code": "200",
@@ -198,7 +198,7 @@ func TestGenerate(t *testing.T) {
 						"desc": "OK",
 					},
 				},
-				token.Token{
+				{
 					Key: "param",
 					Meta: map[string]string{
 						"key":  "token",
@@ -258,31 +258,31 @@ func TestGenerate(t *testing.T) {
 func TestMainSection(t *testing.T) {
 	g := NewGenerator(false).(*generator)
 	g.MainSection([]token.Token{
-		token.Token{
+		{
 			Key:  "title",
 			Meta: map[string]string{"value": "title"},
 		},
-		token.Token{
+		{
 			Key:  "ver",
 			Meta: map[string]string{"value": "1.0"},
 		},
-		token.Token{
+		{
 			Key:  "desc",
 			Meta: map[string]string{"value": "lorem"},
 		},
-		token.Token{
+		{
 			Key:  "contact.name",
 			Meta: map[string]string{"value": "name"},
 		},
-		token.Token{
+		{
 			Key:  "lic.url",
 			Meta: map[string]string{"value": "url"},
 		},
-		token.Token{
+		{
 			Key:  "server",
 			Meta: map[string]string{"url": "url1", "desc": "lorem 1"},
 		},
-		token.Token{
+		{
 			Key:  "server",
 			Meta: map[string]string{"url": "url2", "desc": "lorem 2"},
 		},
@@ -309,7 +309,7 @@ func TestParamsSection(t *testing.T) {
 
 	// Non array
 	g.ParamsSection([]token.Token{
-		token.Token{
+		{
 			Key: "param",
 			Meta: map[string]string{
 				(g.nameMetaKey): "param1",
@@ -338,7 +338,7 @@ func TestParamsSection(t *testing.T) {
 	// Array
 	g.buffer.Clear()
 	g.ParamsSection([]token.Token{
-		token.Token{
+		{
 			Key: "param",
 			Meta: map[string]string{
 				(g.nameMetaKey): "param1",
@@ -436,7 +436,7 @@ func TestResponseSection(t *testing.T) {
 
 	// Just run the method, to see if any error occurs
 	g.ResponseSection(0, []token.Token{
-		token.Token{
+		{
 			Key: "produce",
 			Meta: map[string]string{
 				"value": "application/json",
@@ -451,8 +451,8 @@ func TestResponse(t *testing.T) {
 		"github.com/pkg.Peter": "Peter",
 	}
 	g.wrappers = map[string][]dataWrapper{
-		"success": []dataWrapper{
-			dataWrapper{
+		"success": {
+			{
 				lines: make([]string, 0),
 			},
 		},
@@ -467,7 +467,7 @@ func TestResponse(t *testing.T) {
 
 	// Success, plain
 	g.Response("success", mts, 0, []token.Token{
-		token.Token{
+		{
 			Key: "success",
 			Meta: map[string]string{
 				"code": "\"200\"",
@@ -492,7 +492,7 @@ func TestResponse(t *testing.T) {
 	// Success, direct reference
 	g.buffer.Clear()
 	g.Response("success", mts, 0, []token.Token{
-		token.Token{
+		{
 			Key: "success",
 			Meta: map[string]string{
 				"code": "\"200\"",
@@ -521,7 +521,7 @@ func TestResponse(t *testing.T) {
 	// Success, direct array
 	g.buffer.Clear()
 	g.Response("success", mts, 0, []token.Token{
-		token.Token{
+		{
 			Key: "success",
 			Meta: map[string]string{
 				"code": "\"200\"",
@@ -556,8 +556,8 @@ func TestResponse(t *testing.T) {
 		"github.com/pkg.Peter": "Peter",
 	}
 	g.wrappers = map[string][]dataWrapper{
-		"success": []dataWrapper{
-			dataWrapper{
+		"success": {
+			{
 				pos: 4,
 				lines: []string{
 					":\n",
@@ -573,7 +573,7 @@ func TestResponse(t *testing.T) {
 	}
 	g.buffer.Clear()
 	g.Response("success", mts, 0, []token.Token{
-		token.Token{
+		{
 			Key: "success",
 			Meta: map[string]string{
 				"code": "\"200\"",
@@ -612,7 +612,7 @@ func TestResponse(t *testing.T) {
 	// Success, Wrapper, array
 	g.buffer.Clear()
 	g.Response("success", mts, 0, []token.Token{
-		token.Token{
+		{
 			Key: "success",
 			Meta: map[string]string{
 				"code": "\"200\"",
@@ -694,7 +694,7 @@ func TestResolveWrappers(t *testing.T) {
 	g.wrappers["success"] = make([]dataWrapper, 0)
 	g.wrappers["failure"] = make([]dataWrapper, 0)
 	g.ResolveWrappers([]token.Token{
-		token.Token{
+		{
 			Key: g.wrapperSuccessTokenKey,
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -705,7 +705,7 @@ func TestResolveWrappers(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: g.wrapperSuccessTokenKey,
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -716,7 +716,7 @@ func TestResolveWrappers(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: g.wrapperSuccessTokenKey,
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -755,7 +755,7 @@ func TestResolveWrappers(t *testing.T) {
 	g.wrappers["success"] = make([]dataWrapper, 0)
 	g.wrappers["failure"] = make([]dataWrapper, 0)
 	g.ResolveWrappers([]token.Token{
-		token.Token{
+		{
 			Key: g.wrapperErrorTokenKey,
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -766,7 +766,7 @@ func TestResolveWrappers(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: g.wrapperErrorTokenKey,
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -777,7 +777,7 @@ func TestResolveWrappers(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: g.wrapperErrorTokenKey,
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -819,10 +819,10 @@ func TestResolveComponents(t *testing.T) {
 	var expected map[string][]string
 
 	// Already in cache
-	g.compCache = map[string][]string{"github.com/pkg.Peter": []string{""}}
-	expected = map[string][]string{"github.com/pkg.Peter": []string{""}}
+	g.compCache = map[string][]string{"github.com/pkg.Peter": {""}}
+	expected = map[string][]string{"github.com/pkg.Peter": {""}}
 	g.ResolveComponents([]token.Token{
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -832,7 +832,7 @@ func TestResolveComponents(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -861,12 +861,12 @@ func TestResolveComponents(t *testing.T) {
 	}
 
 	// Unique name
-	g.compCache = map[string][]string{"": []string{""}}
+	g.compCache = map[string][]string{"": {""}}
 	g.compUniqueName = []string{
 		"Peter",
 	}
 	g.ResolveComponents([]token.Token{
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -876,7 +876,7 @@ func TestResolveComponents(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -898,13 +898,13 @@ func TestResolveComponents(t *testing.T) {
 	// Cache properly build
 	g.compCache = make(map[string][]string, 0)
 	expected = map[string][]string{
-		"github.com/pkg.Peter": []string{
+		"github.com/pkg.Peter": {
 			"Peter:\n",
 			"  type: object\n",
 		},
 	}
 	g.ResolveComponents([]token.Token{
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -914,7 +914,7 @@ func TestResolveComponents(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -945,13 +945,13 @@ func TestResolveComponents(t *testing.T) {
 	// Reducing
 	g.compCache = make(map[string][]string, 0)
 	expected = map[string][]string{
-		"github.com/pkg.Peter": []string{
+		"github.com/pkg.Peter": {
 			"Peter:\n",
 			"  type: object\n",
 		},
 	}
 	g.ResolveComponents([]token.Token{
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -961,7 +961,7 @@ func TestResolveComponents(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: "sref",
 			Meta: map[string]string{
 				"pkg.type":      "github.com/pkg.Peter",
@@ -989,7 +989,7 @@ func TestParseObject(t *testing.T) {
 
 	// Flat, no array
 	res = g.ParseObject("github.com/pkg.Peter", []token.Token{
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "firstname",
@@ -998,7 +998,7 @@ func TestParseObject(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "lastname",
@@ -1034,7 +1034,7 @@ func TestParseObject(t *testing.T) {
 
 	// Flat, array
 	res = g.ParseObject("github.com/pkg.Peter", []token.Token{
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "firstname",
@@ -1043,7 +1043,7 @@ func TestParseObject(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "lastname",
@@ -1081,7 +1081,7 @@ func TestParseObject(t *testing.T) {
 
 	// With references, no array
 	res = g.ParseObject("github.com/pkg.Peter", []token.Token{
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "firstname",
@@ -1090,7 +1090,7 @@ func TestParseObject(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "details",
@@ -1099,7 +1099,7 @@ func TestParseObject(t *testing.T) {
 				"desc":          "impsum",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "details.age",
@@ -1138,7 +1138,7 @@ func TestParseObject(t *testing.T) {
 
 	// With references, inner array
 	res = g.ParseObject("github.com/pkg.Peter", []token.Token{
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "firstname",
@@ -1147,7 +1147,7 @@ func TestParseObject(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "details",
@@ -1156,7 +1156,7 @@ func TestParseObject(t *testing.T) {
 				"desc":          "impsum",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "details.age",
@@ -1197,7 +1197,7 @@ func TestParseObject(t *testing.T) {
 
 	// Wrapper
 	res = g.ParseObject("github.com/pkg.Peter", []token.Token{
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "firstname",
@@ -1206,7 +1206,7 @@ func TestParseObject(t *testing.T) {
 				"desc":          "lorem",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "data",
@@ -1216,7 +1216,7 @@ func TestParseObject(t *testing.T) {
 				(g.prtMetaKey):  "true",
 			},
 		},
-		token.Token{
+		{
 			Key: "bref",
 			Meta: map[string]string{
 				(g.nameMetaKey): "lastname",
@@ -1291,13 +1291,13 @@ func TestGetToken(t *testing.T) {
 
 	// Found
 	res, ok := g.GetToken([]token.Token{
-		token.Token{
+		{
 			Key: "a",
 		},
-		token.Token{
+		{
 			Key: "b",
 		},
-		token.Token{
+		{
 			Key: "c",
 		},
 	}, "b")
@@ -1311,7 +1311,7 @@ func TestGetToken(t *testing.T) {
 
 	// Missing
 	res, ok = g.GetToken([]token.Token{
-		token.Token{
+		{
 			Key: "a",
 		},
 	}, "b")
@@ -1328,13 +1328,13 @@ func TestGetTokens(t *testing.T) {
 
 	// Single key
 	res = g.GetTokens([]token.Token{
-		token.Token{
+		{
 			Key: "a",
 		},
-		token.Token{
+		{
 			Key: "b",
 		},
-		token.Token{
+		{
 			Key: "c",
 		},
 	}, "b")
@@ -1347,13 +1347,13 @@ func TestGetTokens(t *testing.T) {
 
 	// Many keys
 	res = g.GetTokens([]token.Token{
-		token.Token{
+		{
 			Key: "a",
 		},
-		token.Token{
+		{
 			Key: "b",
 		},
-		token.Token{
+		{
 			Key: "c",
 		},
 	}, "a", "c")
@@ -1371,13 +1371,13 @@ func TestGetTokens(t *testing.T) {
 func TestTokensByPrefix(t *testing.T) {
 	g := NewGenerator(false).(*generator)
 	res := g.GetTokensByPrefix([]token.Token{
-		token.Token{
+		{
 			Key: "a",
 		},
-		token.Token{
+		{
 			Key: "desired_b",
 		},
-		token.Token{
+		{
 			Key: "c",
 		},
 	}, "desired_")
@@ -1392,19 +1392,19 @@ func TestTokensByPrefix(t *testing.T) {
 func TestGetRequiredTokens(t *testing.T) {
 	g := NewGenerator(false).(*generator)
 	res := g.GetRequiredTokens([]token.Token{
-		token.Token{
+		{
 			Key: "a",
 			Meta: map[string]string{
 				(g.reqMetaKey): "true",
 			},
 		},
-		token.Token{
+		{
 			Key: "b",
 			Meta: map[string]string{
 				(g.reqMetaKey): "false",
 			},
 		},
-		token.Token{
+		{
 			Key: "c",
 			Meta: map[string]string{
 				"other": "value",

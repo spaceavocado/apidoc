@@ -11,8 +11,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/spaceavocado/apidoc/extract"
 	log "github.com/sirupsen/logrus"
+	"github.com/spaceavocado/apidoc/extract"
 )
 
 // Resolver of references
@@ -518,11 +518,11 @@ func NewResolver(verbose bool) Resolver {
 		packages:     make(map[string]map[string]resolvedFile, 0),
 		types:        make(map[string][]string, 0),
 		prefixMapping: map[string]mappingType{
-			"body":    mappingType{"bref", typeBody},
-			"success": mappingType{"sref", typeResp},
-			"failure": mappingType{"fref", typeResp},
-			"fwrap":   mappingType{"fwrapref", typeWrap},
-			"swrap":   mappingType{"swrapref", typeWrap},
+			"body":    {"bref", typeBody},
+			"success": {"sref", typeResp},
+			"failure": {"fref", typeResp},
+			"fwrap":   {"fwrapref", typeWrap},
+			"swrap":   {"swrapref", typeWrap},
 		},
 		metaMapping: map[string]string{
 			"name": "json",

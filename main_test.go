@@ -21,7 +21,7 @@ func TestMain(t *testing.T) {
 	if len(hook.Entries) != 1 {
 		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
 	}
-	o, err := hook.Entries[0].String()
+	_, err := hook.Entries[0].String()
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
 		return
@@ -38,7 +38,7 @@ func TestMain(t *testing.T) {
 	if len(hook.Entries) != 1 {
 		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
 	}
-	o, err = hook.Entries[0].String()
+	o, err := hook.Entries[0].String()
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
 		return

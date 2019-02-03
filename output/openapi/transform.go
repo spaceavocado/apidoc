@@ -14,7 +14,7 @@ var trsEmpty transformation = func(input string) string {
 	return input
 }
 
-// trsChain generates a chain of transfromation
+// trsChain generates a chain of transformation
 // from the send transformations
 func trsChain(trs []transformation) transformation {
 	return func(input string) string {

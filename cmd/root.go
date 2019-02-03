@@ -3,8 +3,8 @@
 package cmd
 
 import (
-	"github.com/spaceavocado/apidoc/app"
 	log "github.com/sirupsen/logrus"
+	"github.com/spaceavocado/apidoc/app"
 	"github.com/spf13/cobra"
 )
 

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/spaceavocado/apidoc/example/request"
 	"github.com/spaceavocado/apidoc/example/response"
-	"github.com/gorilla/mux"
 )
 
 // Person response model
@@ -40,6 +40,7 @@ func Handlers(r *mux.Router) {
 	r.HandleFunc("/person", GetPerson).Methods("PUT")
 }
 
+// GetPerson request
 func GetPerson(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	fmt.Printf("Get person with %s ID", vars["id"])

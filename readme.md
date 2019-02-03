@@ -1,8 +1,17 @@
 # APIDoc
 > Current version: beta-0.2.2
 
+<br>
+<p align="center">
+    <img alt="apidoc" src="https://github.com/spaceavocado/apidoc/raw/master/assets/apidoc.png" width="240">
+</p>
+
 <p align="center">
   Generate RESTful API documentation from GO source files into the <a href="https://swagger.io/specification/">OpenAPI v3.0.2</a> specification (formal Swagger 2.0 Specification).
+</p>
+
+<p align="center">
+  <a href="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"></a> <a href="https://godoc.org/github.com/spaceavocado/apidoc"><img alt="Go Doc" src="https://godoc.org/github.com/spaceavocado/apidoc?status.svg"></a>
 </p>
 
 ## Table of Contents

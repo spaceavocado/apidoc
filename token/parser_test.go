@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/spaceavocado/apidoc/extract"
 	log "github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
+	"github.com/spaceavocado/apidoc/extract"
 )
 
 func TestParse(t *testing.T) {
@@ -17,31 +17,31 @@ func TestParse(t *testing.T) {
 
 	tests := []extract.Block{
 		// Valid
-		extract.Block{
+		{
 			Lines: []string{
 				"param id path {int} true Hello World",
 			},
 		},
 		// Invalid
-		extract.Block{
+		{
 			Lines: []string{
 				"",
 			},
 		},
 		// Unknown token
-		extract.Block{
+		{
 			Lines: []string{
 				"unknown id path {int} true Hello World",
 			},
 		},
 		// Missing dic
-		extract.Block{
+		{
 			Lines: []string{
 				"missingdict id path {int} true Hello World",
 			},
 		},
 		// Post processing
-		extract.Block{
+		{
 			Lines: []string{
 				"success 200 {string} Comment",
 			},
@@ -153,11 +153,11 @@ func TestMap(t *testing.T) {
 	}
 
 	test := [][]string{
-		[]string{
+		{
 			"tag",
 			"path",
 		},
-		[]string{
+		{
 			"tag",
 			"path",
 			"{object}",

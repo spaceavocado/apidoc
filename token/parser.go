@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/spaceavocado/apidoc/extract"
 	log "github.com/sirupsen/logrus"
+	"github.com/spaceavocado/apidoc/extract"
 )
 
 // ErrParsing is soft error not causing the failure
@@ -18,7 +18,7 @@ var errParsing = errors.New("parsing error")
 // Token produced by the tokenization process.
 //
 // Meta is a collection of all found and expected token
-// meta properties defined by token dictionairy.
+// meta properties defined by token dictionary.
 type Token struct {
 	Type Type
 	Key  string
@@ -143,12 +143,12 @@ func NewParser(verbose bool) Parser {
 			"router":   Method,
 		},
 		typeDic: map[Type]dic{
-			Value: dic{
+			Value: {
 				mapping: map[int]string{
 					0: "value",
 				},
 			},
-			Param: dic{
+			Param: {
 				mapping: map[int]string{
 					0: "key",
 					1: "in",
@@ -157,13 +157,13 @@ func NewParser(verbose bool) Parser {
 					4: "desc",
 				},
 			},
-			Server: dic{
+			Server: {
 				mapping: map[int]string{
 					0: "url",
 					1: "desc",
 				},
 			},
-			ReqResp: dic{
+			ReqResp: {
 				mapping: map[int]string{
 					0: "code",
 					1: "type",
@@ -178,13 +178,13 @@ func NewParser(verbose bool) Parser {
 					return meta
 				},
 			},
-			Method: dic{
+			Method: {
 				mapping: map[int]string{
 					0: "url",
 					1: "method",
 				},
 			},
-			Ref: dic{
+			Ref: {
 				mapping: map[int]string{
 					0: "pkg.type",
 					1: "key",
@@ -193,7 +193,7 @@ func NewParser(verbose bool) Parser {
 					4: "desc",
 				},
 			},
-			Wrap: dic{
+			Wrap: {
 				mapping: map[int]string{
 					0: "pkg.type",
 					1: "key",

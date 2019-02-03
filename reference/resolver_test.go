@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/spaceavocado/apidoc/extract"
 	log "github.com/sirupsen/logrus"
 	"github.com/sirupsen/logrus/hooks/test"
+	"github.com/spaceavocado/apidoc/extract"
 )
 
 func TestResolve(t *testing.T) {
@@ -18,7 +18,7 @@ func TestResolve(t *testing.T) {
 
 	// Nothing to resolve
 	err := r.Resolve([]extract.Block{
-		extract.Block{
+		{
 			Lines: []string{""},
 		},
 	})
@@ -29,10 +29,10 @@ func TestResolve(t *testing.T) {
 
 	// Resolved body
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"github.com/pkg/response/tmp.go": resolvedFile{
+		"github.com/pkg/response": {
+			"github.com/pkg/response/tmp.go": {
 				types: map[string]typeRef{
-					"person": typeRef{
+					"person": {
 						file:    "github.com/pkg/response/tmp.go",
 						content: "",
 					},
@@ -41,13 +41,13 @@ func TestResolve(t *testing.T) {
 		},
 	}
 	r.types = map[string][]string{
-		"github.com/pkg/response.person": []string{
+		"github.com/pkg/response.person": {
 			"Name {string} true Description",
 		},
 	}
 
 	blocks := []extract.Block{
-		extract.Block{
+		{
 			File: "github.com/pkg/response/tmp.go",
 			Lines: []string{
 				"body person",
@@ -71,7 +71,7 @@ func TestResolve(t *testing.T) {
 
 	// Resolved body, array
 	blocks = []extract.Block{
-		extract.Block{
+		{
 			File: "github.com/pkg/response/tmp.go",
 			Lines: []string{
 				"body []person",
@@ -95,7 +95,7 @@ func TestResolve(t *testing.T) {
 
 	// Invalid ref
 	blocks = []extract.Block{
-		extract.Block{
+		{
 			File: "github.com/pkg/response/tmp.go",
 			Lines: []string{
 				"body ia_s",
@@ -110,7 +110,7 @@ func TestResolve(t *testing.T) {
 
 	// Resolved response
 	blocks = []extract.Block{
-		extract.Block{
+		{
 			File: "github.com/pkg/response/tmp.go",
 			Lines: []string{
 				"success 200 {object} person",
@@ -145,7 +145,7 @@ func TestResolve(t *testing.T) {
 
 	// Resolved wrappers
 	blocks = []extract.Block{
-		extract.Block{
+		{
 			File: "github.com/pkg/response/tmp.go",
 			Lines: []string{
 				"swrap person Name",
@@ -169,14 +169,14 @@ func TestResolve(t *testing.T) {
 
 	// Fail to resolve the reference
 	r.packages = map[string]map[string]resolvedFile{
-		"x": map[string]resolvedFile{
-			"x.go": resolvedFile{
+		"x": {
+			"x.go": {
 				types: map[string]typeRef{},
 			},
 		},
 	}
 	r.types = map[string][]string{
-		"x": []string{""},
+		"x": {""},
 	}
 	err = r.Resolve(blocks)
 	if err == nil {
@@ -187,10 +187,10 @@ func TestResolve(t *testing.T) {
 	// Root object with own props marked as pointer
 	// Resolved body
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"github.com/pkg/response/tmp.go": resolvedFile{
+		"github.com/pkg/response": {
+			"github.com/pkg/response/tmp.go": {
 				types: map[string]typeRef{
-					"person": typeRef{
+					"person": {
 						file:    "github.com/pkg/response/tmp.go",
 						content: "",
 					},
@@ -199,14 +199,14 @@ func TestResolve(t *testing.T) {
 		},
 	}
 	r.types = map[string][]string{
-		"github.com/pkg/response.person": []string{
+		"github.com/pkg/response.person": {
 			"Name {string} true Description",
 			"Data {object}",
 			"Data.field1 {string} false Description",
 		},
 	}
 	blocks = []extract.Block{
-		extract.Block{
+		{
 			File: "github.com/pkg/response/tmp.go",
 			Lines: []string{
 				"swrap person Data",
@@ -301,10 +301,10 @@ func TestResolveReference(t *testing.T) {
 
 	// Local ref
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"github.com/pkg/response/tmp.go": resolvedFile{
+		"github.com/pkg/response": {
+			"github.com/pkg/response/tmp.go": {
 				types: map[string]typeRef{
-					"person": typeRef{
+					"person": {
 						file:    "github.com/pkg/response/tmp.go",
 						content: "",
 					},
@@ -313,7 +313,7 @@ func TestResolveReference(t *testing.T) {
 		},
 	}
 	r.types = map[string][]string{
-		"github.com/pkg/response.person": []string{
+		"github.com/pkg/response.person": {
 			"Name {string} true Description",
 		},
 	}
@@ -333,10 +333,10 @@ func TestResolveReference(t *testing.T) {
 
 	// External ref, invalid 1
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"github.com/pkg/response/tmp.go": resolvedFile{
+		"github.com/pkg/response": {
+			"github.com/pkg/response/tmp.go": {
 				types: map[string]typeRef{
-					"person": typeRef{
+					"person": {
 						file:    "github.com/pkg/response/tmp.go",
 						content: "",
 					},
@@ -345,7 +345,7 @@ func TestResolveReference(t *testing.T) {
 		},
 	}
 	r.types = map[string][]string{
-		"github.com/pkg/response.person": []string{
+		"github.com/pkg/response.person": {
 			"Name {string} true Description",
 		},
 	}
@@ -361,13 +361,13 @@ func TestResolveReference(t *testing.T) {
 
 	// External ref, invalid 2
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"github.com/pkg/response/tmp.go": resolvedFile{
+		"github.com/pkg/response": {
+			"github.com/pkg/response/tmp.go": {
 				imports: map[string]string{
 					"other": ".....",
 				},
 				types: map[string]typeRef{
-					"person": typeRef{
+					"person": {
 						file:    "github.com/pkg/response/tmp.go",
 						content: "",
 					},
@@ -376,11 +376,11 @@ func TestResolveReference(t *testing.T) {
 		},
 	}
 	r.types = map[string][]string{
-		"github.com/pkg/response.person": []string{
+		"github.com/pkg/response.person": {
 			"Name {string} true Description",
 		},
 	}
-	res, err = r.ResolveReference(
+	_, err = r.ResolveReference(
 		"other.Object",
 		"github.com/pkg/response/tmp.go",
 		0,
@@ -392,13 +392,13 @@ func TestResolveReference(t *testing.T) {
 
 	// External resolved
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"github.com/pkg/response/tmp.go": resolvedFile{
+		"github.com/pkg/response": {
+			"github.com/pkg/response/tmp.go": {
 				imports: map[string]string{
 					"other": "github.com/pkg/response",
 				},
 				types: map[string]typeRef{
-					"Object": typeRef{
+					"Object": {
 						file:    "github.com/pkg/response/tmp.go",
 						content: "",
 					},
@@ -407,7 +407,7 @@ func TestResolveReference(t *testing.T) {
 		},
 	}
 	r.types = map[string][]string{
-		"github.com/pkg/response.Object": []string{
+		"github.com/pkg/response.Object": {
 			"Name {string} true Description",
 		},
 	}
@@ -445,7 +445,7 @@ func TestPkgLoc(t *testing.T) {
 	}
 
 	// Missing
-	loc, err = r.PkgLoc("other", resolvedFile{
+	_, err = r.PkgLoc("other", resolvedFile{
 		imports: map[string]string{
 			"response": "github.com/project/response",
 		},
@@ -494,10 +494,10 @@ func TestReferenceDetails(t *testing.T) {
 	hook := test.NewGlobal()
 	r = NewResolver(true).(*resolver)
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"github.com/pkg/response/tmp.go": resolvedFile{
+		"github.com/pkg/response": {
+			"github.com/pkg/response/tmp.go": {
 				types: map[string]typeRef{
-					"other": typeRef{},
+					"other": {},
 				},
 			},
 		},
@@ -543,7 +543,7 @@ func TestTypeToParams(t *testing.T) {
 
 	// Cache, no changes, i.e. depth over 0
 	r.types = map[string][]string{
-		"github.com/pkg/response": []string{
+		"github.com/pkg/response": {
 			"github.com/pkg/response Name {string} true Description",
 		},
 	}
@@ -563,7 +563,7 @@ func TestTypeToParams(t *testing.T) {
 
 	// Cache, no changes, i.e. depth over 0
 	r.types = map[string][]string{
-		"github.com/pkg/response": []string{
+		"github.com/pkg/response": {
 			"Name {string} true Description",
 		},
 	}
@@ -635,28 +635,28 @@ func TestTypeToParams(t *testing.T) {
 
 	// Valid, reference
 	r.types = map[string][]string{
-		"github.com/pkg/person.Name": []string{
+		"github.com/pkg/person.Name": {
 			"firstname {string} false ",
 			"lastname {string} false ",
 		},
-		"github.com/pkg/person.Details": []string{
+		"github.com/pkg/person.Details": {
 			"age {int} false ",
 			"gender {string} false ",
 		},
 	}
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"github.com/pkg/response/tmp.go": resolvedFile{
+		"github.com/pkg/response": {
+			"github.com/pkg/response/tmp.go": {
 				imports: map[string]string{
 					"person": "github.com/pkg/person",
 				},
 			},
 		},
-		"github.com/pkg/person": map[string]resolvedFile{
-			"github.com/pkg/person/person.go": resolvedFile{
+		"github.com/pkg/person": {
+			"github.com/pkg/person/person.go": {
 				types: map[string]typeRef{
-					"Name":    typeRef{},
-					"Details": typeRef{},
+					"Name":    {},
+					"Details": {},
 				},
 			},
 		},
@@ -692,28 +692,28 @@ func TestTypeToParams(t *testing.T) {
 
 	// Valid, reference, non base depth
 	r.types = map[string][]string{
-		"github.com/pkg/person.Name": []string{
+		"github.com/pkg/person.Name": {
 			"firstname {string} false ",
 			"lastname {string} false ",
 		},
-		"github.com/pkg/person.Details": []string{
+		"github.com/pkg/person.Details": {
 			"age {int} false ",
 			"gender {string} false ",
 		},
 	}
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"github.com/pkg/response/tmp.go": resolvedFile{
+		"github.com/pkg/response": {
+			"github.com/pkg/response/tmp.go": {
 				imports: map[string]string{
 					"person": "github.com/pkg/person",
 				},
 			},
 		},
-		"github.com/pkg/person": map[string]resolvedFile{
-			"github.com/pkg/person/person.go": resolvedFile{
+		"github.com/pkg/person": {
+			"github.com/pkg/person/person.go": {
 				types: map[string]typeRef{
-					"Name":    typeRef{},
-					"Details": typeRef{},
+					"Name":    {},
+					"Details": {},
 				},
 			},
 		},
@@ -735,28 +735,28 @@ func TestTypeToParams(t *testing.T) {
 
 	// Valid, reference, array
 	r.types = map[string][]string{
-		"github.com/pkg/person.Name": []string{
+		"github.com/pkg/person.Name": {
 			"firstname {string} false ",
 			"lastname {string} false ",
 		},
-		"github.com/pkg/person.Details": []string{
+		"github.com/pkg/person.Details": {
 			"age {int} false ",
 			"gender {string} false ",
 		},
 	}
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"github.com/pkg/response/tmp.go": resolvedFile{
+		"github.com/pkg/response": {
+			"github.com/pkg/response/tmp.go": {
 				imports: map[string]string{
 					"person": "github.com/pkg/person",
 				},
 			},
 		},
-		"github.com/pkg/person": map[string]resolvedFile{
-			"github.com/pkg/person/person.go": resolvedFile{
+		"github.com/pkg/person": {
+			"github.com/pkg/person/person.go": {
 				types: map[string]typeRef{
-					"Name":    typeRef{},
-					"Details": typeRef{},
+					"Name":    {},
+					"Details": {},
 				},
 			},
 		},
@@ -837,8 +837,8 @@ func TestParsePackage(t *testing.T) {
 
 	// Cached
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"tmp": resolvedFile{},
+		"github.com/pkg/response": {
+			"tmp": {},
 		},
 	}
 	err := r.ParsePackage("github.com/pkg/response", "github.com/pkg/response")
@@ -900,8 +900,8 @@ func TestParseFile(t *testing.T) {
 
 	// Cached
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"tmp": resolvedFile{},
+		"github.com/pkg/response": {
+			"tmp": {},
 		},
 	}
 	err := r.ParseFile("github.com/pkg/response", "tmp")
@@ -912,8 +912,8 @@ func TestParseFile(t *testing.T) {
 
 	// Invalid file
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"other": resolvedFile{},
+		"github.com/pkg/response": {
+			"other": {},
 		},
 	}
 	err = r.ParseFile("github.com/pkg/response", "tmp")
@@ -942,8 +942,8 @@ func TestParseFile(t *testing.T) {
 
 	// Single import
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"other": resolvedFile{},
+		"github.com/pkg/response": {
+			"other": {},
 		},
 	}
 	content =
@@ -973,8 +973,8 @@ func TestParseFile(t *testing.T) {
 
 	// Multi import
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"other": resolvedFile{},
+		"github.com/pkg/response": {
+			"other": {},
 		},
 	}
 	content =
@@ -1014,8 +1014,8 @@ func TestParseFile(t *testing.T) {
 
 	// Types import
 	r.packages = map[string]map[string]resolvedFile{
-		"github.com/pkg/response": map[string]resolvedFile{
-			"other": resolvedFile{},
+		"github.com/pkg/response": {
+			"other": {},
 		},
 	}
 	content =

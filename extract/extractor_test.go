@@ -208,19 +208,19 @@ func TestGorillaMuxHandler(t *testing.T) {
 	e := NewExtractor(false).(*extractor)
 	testBlocks := []Block{
 		// A block without router param
-		Block{
+		{
 			Lines: []string{
 				"summary Person",
 			},
 		},
 		// Block with router
-		Block{
+		{
 			Lines: []string{
 				"router /url [get]",
 			},
 		},
 		// Block with set param
-		Block{
+		{
 			Lines: []string{
 				"param id path {int} true ID",
 			},
@@ -228,11 +228,11 @@ func TestGorillaMuxHandler(t *testing.T) {
 	}
 
 	testCaptures := [][]string{
-		[]string{
+		{
 			"/section/{id:[0-9]+}/{username}",
 			"\"GET\", \"POST\"",
 		},
-		[]string{
+		{
 			"/section",
 			"\"GET\"",
 		},

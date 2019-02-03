@@ -29,7 +29,7 @@ func TestTokenize(t *testing.T) {
 			},
 		},
 		Endpoints: []extract.Block{
-			extract.Block{
+			{
 				Lines: []string{
 					"summary Sample endpoint",
 				},

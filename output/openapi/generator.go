@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"strings"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spaceavocado/apidoc/output"
 	"github.com/spaceavocado/apidoc/token"
-	log "github.com/sirupsen/logrus"
 )
 
 type generator struct {
@@ -53,8 +53,8 @@ type generator struct {
 	// Meta key used for property/filed name data type
 	typeMetaKey string
 
-	// Token meta values tranformation mapping
-	// TokenKey -> MetaKey -> tranformation
+	// Token meta values transformation mapping
+	// TokenKey -> MetaKey -> transformation
 	trs map[string]map[string]transformation
 }
 
@@ -73,7 +73,7 @@ type dataWrapper struct {
 // Generate the documentation from the given tokens for the
 // main section and for the given endpoints, into the file.
 func (g *generator) Generate(main []token.Token, endpoints [][]token.Token, file string) error {
-	// Tranform meta
+	// Transform meta
 	for _, t := range main {
 		if _, ok := g.trs[t.Key]; ok {
 			for k, m := range t.Meta {
@@ -676,42 +676,42 @@ func NewGenerator(verbose bool) output.Generator {
 		prtMetaKey:             "ptr",
 		typeMetaKey:            "type",
 		trs: map[string]map[string]transformation{
-			"ver": map[string]transformation{
+			"ver": {
 				"value": trsQuote,
 			},
-			"param": map[string]transformation{
+			"param": {
 				"type": trsTypeClean,
 			},
-			"success": map[string]transformation{
-				"type": trsTypeClean,
-				"code": trsQuote,
-			},
-			"failure": map[string]transformation{
+			"success": {
 				"type": trsTypeClean,
 				"code": trsQuote,
 			},
-			"sref": map[string]transformation{
+			"failure": {
+				"type": trsTypeClean,
+				"code": trsQuote,
+			},
+			"sref": {
 				"type": trsTypeClean,
 			},
-			"fref": map[string]transformation{
+			"fref": {
 				"type": trsTypeClean,
 			},
-			"bref": map[string]transformation{
+			"bref": {
 				"type": trsTypeClean,
 			},
-			"swrapref": map[string]transformation{
+			"swrapref": {
 				"type": trsTypeClean,
 			},
-			"fwrapref": map[string]transformation{
+			"fwrapref": {
 				"type": trsTypeClean,
 			},
-			"accept": map[string]transformation{
+			"accept": {
 				"value": trsMediaType,
 			},
-			"produce": map[string]transformation{
+			"produce": {
 				"value": trsMediaType,
 			},
-			"router": map[string]transformation{
+			"router": {
 				"method": trsSpecialChars,
 			},
 		},
