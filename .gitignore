@@ -1,0 +1,11 @@
+# Folders
+docs
+
+# files
+*.exe
+*.log
+debug.*
+
+# Testing
+cover.out
+cover.html
