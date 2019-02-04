@@ -12,6 +12,7 @@ branches:
 
 before_install:
   - go get -t -v ./...
+  - chmod +x ./go.test.sh
 
 script:
   - ./go.test.sh
