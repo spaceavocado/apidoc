@@ -31,6 +31,12 @@ func (a *App) Extract() (ExtractResult, error) {
 	}
 	r.Main = blocks[0]
 
+	// If there is more than one block
+	// Take the first one as the Main block and put other into Endpoints
+	if len(blocks) > 1 {
+		r.Endpoints = append(r.Endpoints, blocks[1:]...)
+	}
+
 	// Endpoint files
 	err = filepath.Walk(a.conf.EndsRoot, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() || strings.HasSuffix(path, ".go") == false {

@@ -26,6 +26,7 @@ func TestTokenize(t *testing.T) {
 		Main: extract.Block{
 			Lines: []string{
 				"title Sample API",
+				"ver 1.0",
 			},
 		},
 		Endpoints: []extract.Block{
@@ -38,6 +39,20 @@ func TestTokenize(t *testing.T) {
 	})
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
+		return
+	}
+
+	// Missing required tokens
+	_, err = a.Tokenize(ExtractResult{
+		Main: extract.Block{
+			Lines: []string{
+				"title Sample API",
+			},
+		},
+		Endpoints: make([]extract.Block, 0),
+	})
+	if err == nil {
+		t.Errorf("Expected error, got nil")
 		return
 	}
 
@@ -56,7 +71,10 @@ func TestTokenize(t *testing.T) {
 	a.tokenParser = &mockParser{
 		returns: -1,
 		tokens: [][]token.Token{
-			make([]token.Token, 1),
+			[]token.Token{
+				token.Token{Key: "title"},
+				token.Token{Key: "ver"},
+			},
 			make([]token.Token, 0),
 		},
 		err: []error{

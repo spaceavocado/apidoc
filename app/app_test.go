@@ -28,7 +28,8 @@ func (g *errorGenerator) Generate(main []token.Token, endpoints [][]token.Token,
 func TestStart(t *testing.T) {
 	content := []string{
 		`
-		// @summary Refresh ID Token
+		// @title Refresh ID Token
+		// @ver 1.0
 		// @desc Use the refresh token
 		// to receive a new ID token.
 		// It must be in a valid format.

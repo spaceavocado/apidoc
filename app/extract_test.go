@@ -32,11 +32,21 @@ func TestExtract(t *testing.T) {
 		`,
 		"func main(){}",
 		"func main(){}",
+		`
+		// @summary Refresh ID Token
+		// @desc Use the refresh token
+		// to receive a new ID token.
+		// It must be in a valid format.
+
+		code := 3
+		// @summary Endpoint 
+		`,
 	}
 	files := []string{
 		"tmp1",
 		"tmp2",
 		"tmp/tmp.go",
+		"tmp3",
 	}
 	err := os.MkdirAll("tmp", os.ModePerm)
 	if err != nil {
@@ -103,6 +113,21 @@ func TestExtract(t *testing.T) {
 	_, err = a.Extract()
 	if err == nil {
 		t.Errorf("Expected error, got nil")
+		return
+	}
+
+	// Endpoint from the main block
+	a = New(Configuration{
+		MainFile: files[3],
+		EndsRoot: "tmp/",
+	})
+	res, err := a.Extract()
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
+		return
+	}
+	if len(res.Main.Lines) == 0 || len(res.Endpoints) == 0 {
+		t.Errorf("Unexpected 1 Main, 1 Endpoint")
 		return
 	}
 }
