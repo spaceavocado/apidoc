@@ -1,4 +1,7 @@
 # APIDoc
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/21fd475a473e4073af3d0654ec43f2a6)](https://app.codacy.com/app/davidhorak/apidoc?utm_source=github.com&utm_medium=referral&utm_content=spaceavocado/apidoc&utm_campaign=Badge_Grade_Dashboard)
+
 > Current version: beta-0.2.3
 
 <br>
