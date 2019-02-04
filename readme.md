@@ -1,5 +1,5 @@
 # APIDoc
-> Current version: beta-0.2.2
+> Current version: beta-0.2.3
 
 <br>
 <p align="center">
