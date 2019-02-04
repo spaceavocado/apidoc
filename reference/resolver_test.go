@@ -259,13 +259,13 @@ func TestAddPrefix(t *testing.T) {
 func TestPkgName(t *testing.T) {
 	r := NewResolver(false).(*resolver)
 	res := r.PkgName("github.com/pkg/name")
-	if res != "github.com\\pkg" {
-		t.Errorf("Expected \"%s\", got \"%s\"", "github.com\\pkg", res)
+	if res != "github.com/pkg" {
+		t.Errorf("Expected \"%s\", got \"%s\"", "github.com/pkg", res)
 		return
 	}
 	res = r.PkgName("github.com\\pkg\\name")
-	if res != "github.com\\pkg" {
-		t.Errorf("Expected \"%s\", got \"%s\"", "github.com\\pkg\\name", res)
+	if res != "github.com/pkg" {
+		t.Errorf("Expected \"%s\", got \"%s\"", "github.com/pkg/name", res)
 		return
 	}
 }

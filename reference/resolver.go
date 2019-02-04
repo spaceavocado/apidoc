@@ -179,7 +179,8 @@ func (r *resolver) AddPrefix(prefix string, items []string) {
 
 // PkgName from the path
 func (r *resolver) PkgName(path string) string {
-	return filepath.Dir(path)
+	path = strings.Replace(path, "\\", "/", -1)
+	return strings.Replace(filepath.Dir(path), "\\", "/", -1)
 }
 
 // NormalizePkgName cleared from the GO root path,
@@ -242,8 +243,7 @@ func (r *resolver) ResolveReference(ref, file string, depth int) ([]string, erro
 
 		// Local reference
 	} else {
-		chunks := strings.Split(pkg, "/")
-		prefix = chunks[len(chunks)-1]
+		prefix = pkg
 	}
 
 	return r.ReferenceDetails(file, prefix, ref, depth)

@@ -37,7 +37,7 @@ func TestGenerate(t *testing.T) {
 	err = g.Generate(
 		[]token.Token{{}},
 		[][]token.Token{{{}}},
-		"invalid|folder/file.go")
+		"invalid|\\0folder/file.go")
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
@@ -46,7 +46,7 @@ func TestGenerate(t *testing.T) {
 	err = g.Generate(
 		[]token.Token{{}},
 		[][]token.Token{{{}}},
-		"|.go")
+		"|\\0.go")
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
