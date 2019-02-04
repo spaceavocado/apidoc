@@ -14,6 +14,7 @@
 <a href="https://travis-ci.org/spaceavocado/apidoc.svg?branch=master"><img alt="Travis Status" src="https://travis-ci.org/spaceavocado/apidoc.svg?branch=master"></a> <a href="https://codecov.io/gh/spaceavocado/apidoc">
   <img src="https://codecov.io/gh/spaceavocado/apidoc/branch/master/graph/badge.svg" />
 </a> <a href="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"></a> <a href="https://godoc.org/github.com/spaceavocado/apidoc"><img alt="Go Doc" src="https://godoc.org/github.com/spaceavocado/apidoc?status.svg"></a>
+<a href="https://app.fossa.io/projects/git%2Bgithub.com%2Fspaceavocado%2Fapidoc?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2Fspaceavocado%2Fapidoc.svg?type=shield"/></a>
 </p>
 
 ## Table of Contents
@@ -482,3 +483,6 @@ When contributing to this repository, please first discuss the change you wish t
 # License
 APIDoc is released under the Apache 2.0 license. See [LICENSE.txt](https://github.com/spaceavocado/apidoc/blob/master/LICENSE.txt)
 
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fspaceavocado%2Fapidoc.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fspaceavocado%2Fapidoc?ref=badge_large)
