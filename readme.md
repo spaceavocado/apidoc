@@ -13,7 +13,7 @@
 <p align="center">
 <a href="https://travis-ci.org/spaceavocado/apidoc.svg?branch=master"><img alt="Travis Status" src="https://travis-ci.org/spaceavocado/apidoc.svg?branch=master"></a> <a href="https://codecov.io/gh/spaceavocado/apidoc">
   <img src="https://codecov.io/gh/spaceavocado/apidoc/branch/master/graph/badge.svg" />
-</a> <a href="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"></a> <a href="https://godoc.org/github.com/spaceavocado/apidoc"><img alt="Go Doc" src="https://godoc.org/github.com/spaceavocado/apidoc?status.svg"></a>
+</a> <a href="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"></a> <a href="https://www.codacy.com/app/davidhorak/apidoc?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=spaceavocado/apidoc&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/ed701d5e42f3426d832de973906ba19b"/></a> <a href="https://app.fossa.io/projects/git%2Bgithub.com%2Fspaceavocado%2Fapidoc?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2Fspaceavocado%2Fapidoc.svg?type=shield"/></a> <a href="https://godoc.org/github.com/spaceavocado/apidoc"><img alt="Go Doc" src="https://godoc.org/github.com/spaceavocado/apidoc?status.svg"></a>
 </p>
 
 ## Table of Contents
