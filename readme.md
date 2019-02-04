@@ -11,7 +11,9 @@
 </p>
 
 <p align="center">
-<a href="https://travis-ci.org/spaceavocado/apidoc.svg?branch=master"><img alt="Travis Status" src="https://travis-ci.org/spaceavocado/apidoc.svg?branch=master"></a> <a href="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"></a> <a href="https://godoc.org/github.com/spaceavocado/apidoc"><img alt="Go Doc" src="https://godoc.org/github.com/spaceavocado/apidoc?status.svg"></a>
+<a href="https://travis-ci.org/spaceavocado/apidoc.svg?branch=master"><img alt="Travis Status" src="https://travis-ci.org/spaceavocado/apidoc.svg?branch=master"></a> <a href="https://codecov.io/gh/spaceavocado/apidoc">
+  <img src="https://codecov.io/gh/spaceavocado/apidoc/branch/master/graph/badge.svg" />
+</a> <a href="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/spaceavocado/apidoc"></a> <a href="https://godoc.org/github.com/spaceavocado/apidoc"><img alt="Go Doc" src="https://godoc.org/github.com/spaceavocado/apidoc?status.svg"></a>
 </p>
 
 ## Table of Contents
