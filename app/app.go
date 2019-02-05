@@ -49,6 +49,13 @@ func (a *App) Start() {
 		return
 	}
 
+	// Subrouters
+	tRes.Endpoints, err = resolveSubrouters(tRes.Endpoints)
+	if err != nil {
+		log.WithError(err).Errorf("an error has occurred during the subrouter resolving procedure")
+		return
+	}
+
 	// Generate
 	err = a.generator.Generate(tRes.Main, tRes.Endpoints, filepath.Join(a.conf.Output, "openapi.yaml"))
 	if err != nil {

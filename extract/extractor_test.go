@@ -105,6 +105,12 @@ func TestParse(t *testing.T) {
 		// @desc Use the refresh token.
 		r.Handle("/person/{id:[0-9]+}", GetPerson)
 		`,
+
+		// Gorilla mux subrouter
+		`
+		// @router products
+		r.PathPrefix("/products").Subrouter()
+		`,
 	}
 
 	expected := []string{
@@ -201,6 +207,24 @@ func TestParse(t *testing.T) {
 	}
 	if blocks[0].Lines[2] != "router /person/{id} [get]" {
 		t.Errorf("Invalid multiline parsing, has \"%s\", expected \"%s\"", blocks[0].Lines[2], "router /person/{id} [get]")
+	}
+
+	r = bufio.NewReaderSize(strings.NewReader(test[3]), 0)
+	blocks, err = e.parse(r, "test.go")
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
+		return
+	}
+	if len(blocks) == 0 {
+		t.Errorf("No blocks have been extracted.")
+		return
+	}
+	if len(blocks[0].Lines) != 2 {
+		t.Errorf("Incorrect number of blocks have been captured. Expected: %d, got: %d", 2, len(blocks[0].Lines))
+		return
+	}
+	if blocks[0].Lines[1] != "routerurl /products" {
+		t.Errorf("Invalid multiline parsing, has \"%s\", expected \"%s\"", blocks[0].Lines[1], "router routerurl /products")
 	}
 }
 

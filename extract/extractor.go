@@ -33,12 +33,13 @@ type Extractor interface {
 }
 
 type extractor struct {
-	verbose             bool
-	commentRx           *regexp.Regexp
-	apiDocRx            *regexp.Regexp
-	gorillaMuxHandlerRx *regexp.Regexp
-	pathCleanRx         *regexp.Regexp
-	pathParamRx         *regexp.Regexp
+	verbose               bool
+	commentRx             *regexp.Regexp
+	apiDocRx              *regexp.Regexp
+	gorillaMuxHandlerRx   *regexp.Regexp
+	gorillaMuxSubrouterRx *regexp.Regexp
+	pathCleanRx           *regexp.Regexp
+	pathParamRx           *regexp.Regexp
 }
 
 // Extract the documentation from the file.
@@ -126,6 +127,10 @@ func (e *extractor) parse(r *bufio.Reader, file string) ([]Block, error) {
 					methods = m[2]
 				}
 				blocks[len(blocks)-1] = e.gorillaMuxHandler(blocks[len(blocks)-1], url, methods)
+				// Gorilla mux subrouter
+			} else if m := e.gorillaMuxSubrouterRx.FindStringSubmatch(line); len(m) > 0 {
+				url := m[1]
+				blocks[len(blocks)-1].Lines = append(blocks[len(blocks)-1].Lines, fmt.Sprintf("routerurl %s", url))
 			}
 		}
 	}
@@ -188,11 +193,12 @@ func (e *extractor) gorillaMuxHandler(b Block, url, methods string) Block {
 // NewExtractor instance
 func NewExtractor(verbose bool) Extractor {
 	return &extractor{
-		verbose:             verbose,
-		commentRx:           regexp.MustCompile("^\\s*\\/\\/\\s*(.*)"),
-		apiDocRx:            regexp.MustCompile("^@([^\\s].*)"),
-		gorillaMuxHandlerRx: regexp.MustCompile("(?:HandleFunc|Handle)\\(\"([^\"]+)\".*\\.Methods\\(([^\\)]+)\\)|(?:HandleFunc|Handle)\\(\"([^\"]+)\""),
-		pathCleanRx:         regexp.MustCompile(":[^}]+"),
-		pathParamRx:         regexp.MustCompile("{([^}]+)}"),
+		verbose:               verbose,
+		commentRx:             regexp.MustCompile("^\\s*\\/\\/\\s*(.*)"),
+		apiDocRx:              regexp.MustCompile("^@([^\\s].*)"),
+		gorillaMuxHandlerRx:   regexp.MustCompile("(?:HandleFunc|Handle)\\(\"([^\"]+)\".*\\.Methods\\(([^\\)]+)\\)|(?:HandleFunc|Handle)\\(\"([^\"]+)\""),
+		gorillaMuxSubrouterRx: regexp.MustCompile("PathPrefix\\(\"([^\"]+)\\\"\\)\\.Subrouter\\(\\)"),
+		pathCleanRx:           regexp.MustCompile(":[^}]+"),
+		pathParamRx:           regexp.MustCompile("{([^}]+)}"),
 	}
 }
