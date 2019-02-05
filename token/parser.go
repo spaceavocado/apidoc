@@ -35,7 +35,7 @@ const (
 	Param
 	Server
 	ReqResp
-	Method
+	Router
 	Ref
 	Wrap
 )
@@ -140,7 +140,11 @@ func NewParser(verbose bool) Parser {
 			"body":     Value,
 			"success":  ReqResp,
 			"failure":  ReqResp,
-			"router":   Method,
+			"router":   Router,
+
+			// Subrouter
+			"routerurl": Value,
+			"subrouter": Value,
 		},
 		typeDic: map[Type]dic{
 			Value: {
@@ -178,7 +182,7 @@ func NewParser(verbose bool) Parser {
 					return meta
 				},
 			},
-			Method: {
+			Router: {
 				mapping: map[int]string{
 					0: "url",
 					1: "method",

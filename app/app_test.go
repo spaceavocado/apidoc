@@ -36,11 +36,17 @@ func TestStart(t *testing.T) {
 		`,
 		"func main(){}",
 		"func main(){}",
+		`
+		// @router
+
+		// @router
+		`,
 	}
 	files := []string{
 		"tmp1",
 		"tmp2",
-		"tmp/tmp.go",
+		"tmp/tmp1.go",
+		"tmp/tmp2.go",
 	}
 	err := os.MkdirAll("tmp", os.ModePerm)
 	if err != nil {
@@ -109,10 +115,56 @@ func TestStart(t *testing.T) {
 		EndsRoot: "tmp/",
 		Output:   "tmp/output",
 	})
-	a.generator = &errorGenerator{}
+	a.tokenParser = &mockParser{
+		returns: -1,
+		tokens: [][]token.Token{
+			{
+				{Key: "title", Meta: map[string]string{
+					"value": "lorem",
+				}},
+				{Key: "ver", Meta: map[string]string{
+					"value": "1.0",
+				}},
+			},
+			{
+				{Key: "router", Meta: map[string]string{
+					"url": "b", "method": "",
+				}},
+				{Key: "subrouter", Meta: map[string]string{
+					"value": "c",
+				}},
+				{Key: "routerurl", Meta: map[string]string{
+					"value": "/person",
+				}},
+			},
+			{
+				{Key: "router", Meta: map[string]string{
+					"url": "c", "method": "",
+				}},
+				{Key: "routerurl", Meta: map[string]string{
+					"value": "/base",
+				}},
+				{Key: "subrouter", Meta: map[string]string{
+					"value": "b",
+				}},
+			},
+		},
+		err: []error{nil, nil, nil},
+	}
 	a.Start()
 	if len(hook.Entries) != 1 {
 		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
 	}
 
+	hook.Reset()
+	a = New(Configuration{
+		MainFile: "tmp1",
+		EndsRoot: "tmp/",
+		Output:   "tmp/output",
+	})
+	a.generator = &errorGenerator{}
+	a.Start()
+	if len(hook.Entries) != 1 {
+		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
+	}
 }

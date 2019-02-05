@@ -37,5 +37,21 @@ func main() {
 	// Person handlers
 	person.Handlers(r)
 
+	// Subrouter example:
+	// @router animals
+	sa := r.PathPrefix("/animal").Subrouter()
+
+	// @router cats
+	// @subrouter animals
+	sc := sa.PathPrefix("/cat").Subrouter()
+
+	// @produce plain/text
+	// @success 200 {string} OK
+	// @subrouter cats
+	sc.HandleFunc("/list", CatList).Methods("GET")
+
 	log.Fatal(srv.ListenAndServe())
 }
+
+// CatList request
+func CatList(w http.ResponseWriter, r *http.Request) {}
