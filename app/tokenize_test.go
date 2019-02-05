@@ -1,9 +1,12 @@
 package app
 
 import (
+	"bytes"
 	"errors"
 	"testing"
 
+	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus/hooks/test"
 	"github.com/spaceavocado/apidoc/extract"
 	"github.com/spaceavocado/apidoc/token"
 )
@@ -71,9 +74,9 @@ func TestTokenize(t *testing.T) {
 	a.tokenParser = &mockParser{
 		returns: -1,
 		tokens: [][]token.Token{
-			[]token.Token{
-				token.Token{Key: "title"},
-				token.Token{Key: "ver"},
+			{
+				{Key: "title"},
+				{Key: "ver"},
 			},
 			make([]token.Token, 0),
 		},
@@ -88,5 +91,56 @@ func TestTokenize(t *testing.T) {
 	if err != nil {
 		t.Errorf("Expected error, got nil")
 		return
+	}
+}
+
+func TestReduceEndpoints(t *testing.T) {
+	a := New(Configuration{})
+	res := a.ReduceEndpoints([][]token.Token{
+		// Valid
+		{
+			{Key: "success"},
+			{Key: "produce"},
+			{Key: "router"},
+			{Key: "summary"},
+		},
+		// Invalid
+		{
+			{Key: "success"},
+			{Key: "router"},
+			{Key: "summary"},
+		},
+	})
+	if len(res) != 1 {
+		t.Errorf("Expected %d log entries, got %d", 1, len(res))
+	}
+
+	// Verbose
+	b := &bytes.Buffer{}
+	log.SetOutput(b)
+	hook := test.NewGlobal()
+	a = New(Configuration{
+		Verbose: true,
+	})
+	res = a.ReduceEndpoints([][]token.Token{
+		// Valid
+		{
+			{Key: "success"},
+			{Key: "produce"},
+			{Key: "router"},
+			{Key: "summary"},
+		},
+		// Invalid
+		{
+			{Key: "success"},
+			{Key: "router"},
+			{Key: "summary"},
+		},
+	})
+	if len(res) != 1 {
+		t.Errorf("Expected %d log entries, got %d", 1, len(res))
+	}
+	if len(hook.Entries) != 1 {
+		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
 	}
 }
