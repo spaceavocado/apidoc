@@ -71,9 +71,9 @@ func TestTokenize(t *testing.T) {
 	a.tokenParser = &mockParser{
 		returns: -1,
 		tokens: [][]token.Token{
-			[]token.Token{
-				token.Token{Key: "title"},
-				token.Token{Key: "ver"},
+			{
+				{Key: "title"},
+				{Key: "ver"},
 			},
 			make([]token.Token, 0),
 		},

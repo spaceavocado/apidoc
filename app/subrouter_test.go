@@ -13,7 +13,7 @@ func TestResolveSubrouters(t *testing.T) {
 
 	// Expected
 	test = [][]token.Token{
-		[]token.Token{
+		{
 			{Key: "router", Meta: map[string]string{
 				"url": "/add", "method": "[get]",
 			}},
@@ -21,7 +21,7 @@ func TestResolveSubrouters(t *testing.T) {
 				"value": "a",
 			}},
 		},
-		[]token.Token{
+		{
 			{Key: "router", Meta: map[string]string{
 				"url": "b", "method": "",
 			}},
@@ -32,7 +32,7 @@ func TestResolveSubrouters(t *testing.T) {
 				"value": "/person",
 			}},
 		},
-		[]token.Token{
+		{
 			{Key: "router", Meta: map[string]string{
 				"url": "c", "method": "",
 			}},
@@ -40,7 +40,7 @@ func TestResolveSubrouters(t *testing.T) {
 				"value": "/base",
 			}},
 		},
-		[]token.Token{
+		{
 			{Key: "router", Meta: map[string]string{
 				"url": "a", "method": "",
 			}},
@@ -69,7 +69,7 @@ func TestResolveSubrouters(t *testing.T) {
 
 	// False positive subrouters
 	test = [][]token.Token{
-		[]token.Token{
+		{
 			{Key: "router", Meta: map[string]string{
 				"url": "/add", "method": "[get]",
 			}},
@@ -77,7 +77,7 @@ func TestResolveSubrouters(t *testing.T) {
 				"value": "a",
 			}},
 		},
-		[]token.Token{
+		{
 			{Key: "router", Meta: map[string]string{
 				"url": "c", "method": "",
 			}},
@@ -88,7 +88,7 @@ func TestResolveSubrouters(t *testing.T) {
 				"value": "/base",
 			}},
 		},
-		[]token.Token{
+		{
 			{Key: "subrouter", Meta: map[string]string{
 				"value": "b",
 			}},
@@ -111,7 +111,7 @@ func TestResolveSubrouters(t *testing.T) {
 
 	// Cycling
 	test = [][]token.Token{
-		[]token.Token{
+		{
 			{Key: "router", Meta: map[string]string{
 				"url": "/add", "method": "[get]",
 			}},
@@ -119,7 +119,7 @@ func TestResolveSubrouters(t *testing.T) {
 				"value": "a",
 			}},
 		},
-		[]token.Token{
+		{
 			{Key: "router", Meta: map[string]string{
 				"url": "b", "method": "",
 			}},
@@ -130,7 +130,7 @@ func TestResolveSubrouters(t *testing.T) {
 				"value": "/person",
 			}},
 		},
-		[]token.Token{
+		{
 			{Key: "router", Meta: map[string]string{
 				"url": "c", "method": "",
 			}},

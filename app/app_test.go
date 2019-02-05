@@ -118,7 +118,7 @@ func TestStart(t *testing.T) {
 	a.tokenParser = &mockParser{
 		returns: -1,
 		tokens: [][]token.Token{
-			[]token.Token{
+			{
 				{Key: "title", Meta: map[string]string{
 					"value": "lorem",
 				}},
@@ -126,7 +126,7 @@ func TestStart(t *testing.T) {
 					"value": "1.0",
 				}},
 			},
-			[]token.Token{
+			{
 				{Key: "router", Meta: map[string]string{
 					"url": "b", "method": "",
 				}},
@@ -137,7 +137,7 @@ func TestStart(t *testing.T) {
 					"value": "/person",
 				}},
 			},
-			[]token.Token{
+			{
 				{Key: "router", Meta: map[string]string{
 					"url": "c", "method": "",
 				}},
@@ -167,5 +167,4 @@ func TestStart(t *testing.T) {
 	if len(hook.Entries) != 1 {
 		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
 	}
-
 }

@@ -46,6 +46,9 @@
     - [Example Endpoint Annotation](#example-endpoint-annotation)
   - [gorilla/mux Handler Functions](#gorillamux-handler-functions)
     - [Notes](#notes)
+  - [gorilla/mux Subrouter](#gorillamux-subrouter)
+    - [Subrouter Annotation](#subrouter-annotation)
+      - [Example](#example-2)
   - [Mime Types Annotation](#mime-types-annotation)
   - [Struct Annotation](#struct-annotation)
   - [Data Types Conversion](#data-types-conversion)
@@ -173,6 +176,7 @@ An endpoint is being considered as a API comment annotation block found within a
 | success (code) {(type)} (reference or empty) (description) | Describes a single success response from an API Operation.<br><br>[See Response Tag](#response-tag)                                                                                           | https://swagger.io/specification/#responseObject                     | // @success 200 {object} response.Success OK<br><br>// @success 200 {string} OK                       |
 | fwrap (reference) (field pointer)                          | Failure object wrapper. If this tag is set, any failure response object is being wrapped with this object on the desired **pointer field**<br><br>[See Wrapper Tag](#wrapper-tag)             | n/a                                                                  | // @fwrap response.Error                                                                              |
 | failure (code) {(type)} (reference or empty) (description) | Describes a single failure response from an API Operation.<br><br>[See Response Tag](#response-tag)                                                                                           | https://swagger.io/specification/#responseObject                     | // @failure 401 {object} response.AuthError Unauthorized<br><br>// @failure 401 {string} Unauthorized |
+| subrouter (value)                                          | Name of the subrouter used for this endpoint. <br><br>[See gorilla/mux Subrouter](#gorillamux-subrouter)                                                                                      | n/a                                                                  | // @subrouter user [post]                                                                             |
 | router (path) [(method)]                                   | Describes the operations available on a single path, i.e. endpoint URL<br><br>[See Path Tag](#path-tag)                                                                                       | https://swagger.io/specification/#pathItemObject                     | // @router /login [post]                                                                              |
 
 ### Param Tag
@@ -361,7 +365,35 @@ Automatically resolved tags will be be:
 ### Notes
 * This process is skipped if the endpoint annotation contains the `@router` tag
 * If the endpoint annotation contains a `@param` tag found in the func path parameter, it is not being overwritten by the this process nor double annotated.
-* Current version of the APIDoc does not resolves a subrouter path, i.e. if your Handler function is called on a subrouter, the generated `@router` tag will have only the relative URL.
+* Please [see gorilla/mux Subrouter](#gorillamux-subrouter) section for more information how to work with gorilla/mux subrouters.
+
+## gorilla/mux Subrouter
+An endpoint can use `subrouter` tag to connect a endpoint with the subrouter to resolve the final endpoint URL.
+
+### Subrouter Annotation
+| Annotation       | Description                   | Example             |
+| ---------------- | ----------------------------- | ------------------- |
+| router (name)    | Name of the subrouter.        | // @router account  |
+| subrouter (name) | Name of the parent subrouter. | // @subrouter admin |
+
+The annotation must be placed above the **gorilla.mux Subrouter** method anywhere within the Main file or in any file within the endpoints root folder.
+
+#### Example
+```go
+// @router admin
+r.PathPrefix("/admin").Subrouter()
+
+// @router user
+// @subrouter admin
+r.PathPrefix("/user").Subrouter()
+
+// @summary List of users
+// @produce json
+// @success 200 {object} Person OK
+// @subrouter user
+r.HandleFunc("/list", GetPersonList).Methods("GET")
+```
+> The URL resolved for the "List of users" endpoint will be `/admin/user/list`
 
 ## Mime Types Annotation
 | Mime Type                         | Annotation                              |
