@@ -56,6 +56,9 @@ func (a *App) Start() {
 		return
 	}
 
+	// Reduce by invalid endpoints
+	tRes.Endpoints = a.ReduceEndpoints(tRes.Endpoints)
+
 	// Generate
 	err = a.generator.Generate(tRes.Main, tRes.Endpoints, filepath.Join(a.conf.Output, "openapi.yaml"))
 	if err != nil {
