@@ -14,7 +14,7 @@ import (
 
 const (
 	// Version of the APIDoc
-	Version string = "beta-0.3.0"
+	Version string = "beta-0.3.2"
 )
 
 // App main structure
@@ -60,11 +60,14 @@ func (a *App) Start() {
 	tRes.Endpoints = a.ReduceEndpoints(tRes.Endpoints)
 
 	// Generate
-	err = a.generator.Generate(tRes.Main, tRes.Endpoints, filepath.Join(a.conf.Output, "openapi.yaml"))
+	output := filepath.Join(a.conf.Output, "openapi.yaml")
+	err = a.generator.Generate(tRes.Main, tRes.Endpoints, output)
 	if err != nil {
 		log.WithError(err).Errorf("an error has occurred during the generation of the output")
 		return
 	}
+
+	log.Infof("%s has been generated!", output)
 }
 
 // New application instance

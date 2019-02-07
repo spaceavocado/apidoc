@@ -13,11 +13,12 @@ func RootCmd() *cobra.Command {
 	var rootCmd = &cobra.Command{
 		Short: "apidoc",
 		Long:  "API Documentation Generator",
-		Run: func(cmd *cobra.Command, args []string) {
-			mainFile, err := cmd.PersistentFlags().GetString("main")
-			endsRoot, err := cmd.PersistentFlags().GetString("endpoints")
-			output, err := cmd.PersistentFlags().GetString("output")
-			verbose, err := cmd.PersistentFlags().GetBool("verbose")
+		Run: func(c *cobra.Command, args []string) {
+			log.Infof("%s (%s)", c.Long, app.Version)
+			mainFile, err := c.PersistentFlags().GetString("main")
+			endsRoot, err := c.PersistentFlags().GetString("endpoints")
+			output, err := c.PersistentFlags().GetString("output")
+			verbose, err := c.PersistentFlags().GetBool("verbose")
 			if err != nil {
 				log.Errorf("Invalid CLI flags, please use the -h flag to see all available options: %+v", err)
 				return

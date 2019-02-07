@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"strings"
 	"testing"
 
 	log "github.com/sirupsen/logrus"
@@ -23,6 +24,12 @@ type errorGenerator struct{}
 
 func (g *errorGenerator) Generate(main []token.Token, endpoints [][]token.Token, file string) error {
 	return errors.New("simulated error")
+}
+
+type dataGenerator struct{}
+
+func (g *dataGenerator) Generate(main []token.Token, endpoints [][]token.Token, file string) error {
+	return nil
 }
 
 func TestStart(t *testing.T) {
@@ -166,5 +173,25 @@ func TestStart(t *testing.T) {
 	a.Start()
 	if len(hook.Entries) != 1 {
 		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
+	}
+
+	hook.Reset()
+	a = New(Configuration{
+		MainFile: "tmp1",
+		EndsRoot: "tmp/",
+		Output:   "tmp/output",
+	})
+	a.generator = &dataGenerator{}
+	a.Start()
+	if len(hook.Entries) != 1 {
+		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
+	}
+	o, err := hook.Entries[0].String()
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
+		return
+	}
+	if strings.Contains(o, "has been generated!") == false {
+		t.Errorf("Expected \"%s\" error, got \"%s\"", "has been generated!", o)
 	}
 }

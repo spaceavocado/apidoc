@@ -19,8 +19,8 @@ func TestRootCmd(t *testing.T) {
 	hook := test.NewGlobal()
 	cmd := RootCmd()
 	cmd.Run(&cobra.Command{}, []string{""})
-	if len(hook.Entries) != 1 {
-		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
+	if len(hook.Entries) != 2 {
+		t.Errorf("Expected %d log entries, got %d", 2, len(hook.Entries))
 	}
 
 	hook.Reset()
@@ -32,7 +32,7 @@ func TestRootCmd(t *testing.T) {
 
 	cmd = RootCmd()
 	cmd.Run(&c, []string{""})
-	if len(hook.Entries) != 1 {
-		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
+	if len(hook.Entries) != 2 {
+		t.Errorf("Expected %d log entries, got %d", 2, len(hook.Entries))
 	}
 }

@@ -10,9 +10,11 @@ package main
 import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spaceavocado/apidoc/cmd"
+	"github.com/spaceavocado/apidoc/misc"
 )
 
 func main() {
+	log.SetFormatter(&misc.PlainLogFormatter{})
 	if err := cmd.RootCmd().Execute(); err != nil {
 		log.WithError(err).Error("unexpected error")
 	}

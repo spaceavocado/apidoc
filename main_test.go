@@ -35,10 +35,10 @@ func TestMain(t *testing.T) {
 	hook.Reset()
 	os.Args = []string{"apidoc", "-m", "not-existing-file"}
 	main()
-	if len(hook.Entries) != 1 {
-		t.Errorf("Expected %d log entries, got %d", 1, len(hook.Entries))
+	if len(hook.Entries) != 2 {
+		t.Errorf("Expected %d log entries, got %d", 2, len(hook.Entries))
 	}
-	o, err := hook.Entries[0].String()
+	o, err := hook.Entries[1].String()
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
 		return
