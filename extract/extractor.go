@@ -114,23 +114,23 @@ func (e *extractor) parse(r *bufio.Reader, file string) ([]Block, error) {
 				}
 				commentBuffer = ""
 				blocks = append(blocks, block)
-			}
 
-			// Gorilla mux router
-			if m := e.gorillaMuxHandlerRx.FindStringSubmatch(line); len(m) > 0 {
-				url := ""
-				methods := ""
-				if m[3] != "" {
-					url = m[3]
-				} else {
-					url = m[1]
-					methods = m[2]
+				// Gorilla mux router
+				if m := e.gorillaMuxHandlerRx.FindStringSubmatch(line); len(m) > 0 {
+					url := ""
+					methods := ""
+					if m[3] != "" {
+						url = m[3]
+					} else {
+						url = m[1]
+						methods = m[2]
+					}
+					blocks[len(blocks)-1] = e.gorillaMuxHandler(blocks[len(blocks)-1], url, methods)
+					// Gorilla mux subrouter
+				} else if m := e.gorillaMuxSubrouterRx.FindStringSubmatch(line); len(m) > 0 {
+					url := m[1]
+					blocks[len(blocks)-1].Lines = append(blocks[len(blocks)-1].Lines, fmt.Sprintf("routerurl %s", url))
 				}
-				blocks[len(blocks)-1] = e.gorillaMuxHandler(blocks[len(blocks)-1], url, methods)
-				// Gorilla mux subrouter
-			} else if m := e.gorillaMuxSubrouterRx.FindStringSubmatch(line); len(m) > 0 {
-				url := m[1]
-				blocks[len(blocks)-1].Lines = append(blocks[len(blocks)-1].Lines, fmt.Sprintf("routerurl %s", url))
 			}
 		}
 	}
