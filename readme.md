@@ -1,5 +1,5 @@
 # APIDoc
-> Current version: beta-0.3.2
+> Current version: beta-0.3.3
 
 <br>
 <p align="center">
@@ -55,6 +55,8 @@
 - [Tips](#tips)
   - [Annotation over Multiple Lines](#annotation-over-multiple-lines)
   - [Array References](#array-references)
+  - [And Endpoint With Many Decralarions](#and-endpoint-with-many-decralarions)
+    - [Example](#example-3)
 - [APIDoc CLI](#apidoc-cli)
 - [About the Project](#about-the-project)
 - [Contributing](#contributing)
@@ -469,6 +471,61 @@ Use **[]** annotation in from of the reference.
 // @body []request.Person
 
 // @success 200 {object} []response.Person OK
+```
+
+## And Endpoint With Many Decralarions
+An endpoint, with the same URL could be declared separately with different methods, and the generator will properly group them.
+### Example
+```go
+// @summary Get User
+// @param id path {int} true User ID
+// @produce text
+// @success 200 {string} OK
+// @router /user/{id} [post]
+
+// ...
+
+// @summary Delete User
+// @param id path {int} true User ID
+// @produce text
+// @success 200 {string} OK
+// @router /user/{id} [delete]
+```
+will produce
+```yaml
+/user/{id}:
+  get:
+    summary: Get User
+    parameters:
+    - name: id
+      description: User ID
+      in: path
+      required: true
+      schema:
+        type: integer
+    responses:
+      "200":
+        description: OK
+        content:
+          plain/text:
+            schema:
+              type: string
+  delete:
+    summary: Delete User
+    parameters:
+    - name: id
+      description: User ID
+      in: path
+      required: true
+      schema:
+        type: integer
+    responses:
+      "200":
+        description: OK
+        content:
+          plain/text:
+            schema:
+              type: string
 ```
 
 # APIDoc CLI

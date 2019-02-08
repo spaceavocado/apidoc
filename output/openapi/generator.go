@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/spaceavocado/apidoc/misc"
 	"github.com/spaceavocado/apidoc/output"
 	"github.com/spaceavocado/apidoc/token"
 )
@@ -115,61 +116,82 @@ func (g *generator) Generate(main []token.Token, endpoints [][]token.Token, file
 		}
 	}
 
+	// Resolved endpoints
+	// Used to prevent re-generation of sibling endpoints
+	resolved := make([]string, 0, len(endpoints))
+
 	// Resolve endpoints
 	g.buffer.Label("paths", 0)
 	for index, e := range endpoints {
 		if t, ok := g.GetToken(e, "router"); ok {
 			if m, ok := g.TokenMeta(t, "url"); ok {
+				if misc.StringInSlice(m, resolved) {
+					continue
+				}
+				resolved = append(resolved, m)
 				g.buffer.Label(m, 1)
 
-				// Tags
-				tags := make([]string, 0)
-				if t, ok := g.GetToken(e, "tag"); ok {
-					if m, ok := g.TokenMeta(t, "value"); ok && len(m) > 0 {
-						tags = g.ParseArray(m, trsEmpty)
+				// Get sibling endpoints
+				group := [][]token.Token{e}
+				if index < len(endpoints)-1 {
+					if siblings := g.SiblingEndpoints(m, endpoints[index+1:]); len(siblings) > 0 {
+						group = append(group, siblings...)
 					}
 				}
 
-				// Methods
-				if m, ok := g.TokenMeta(t, "method"); ok {
-					methods := g.ParseArray(m, trsEmpty)
-					for _, method := range methods {
-						g.buffer.Label(method, 2)
-						if t, ok := g.GetToken(e, "summary"); ok {
-							g.BufferTokenMeta(t, "value", "summary", 3)
+				// Resolved groupped endpoints
+				for _, e := range group {
+					// Tags
+					tags := make([]string, 0)
+					if t, ok := g.GetToken(e, "tag"); ok {
+						if m, ok := g.TokenMeta(t, "value"); ok && len(m) > 0 {
+							tags = g.ParseArray(m, trsEmpty)
 						}
-						if t, ok := g.GetToken(e, "id"); ok {
-							g.BufferTokenMeta(t, "value", "operationId", 3)
-						}
-						if t, ok := g.GetToken(e, "desc"); ok {
-							g.BufferTokenMeta(t, "value", "description", 3)
-						}
+					}
 
-						// Tags
-						if len(tags) > 0 {
-							g.buffer.Label("tags", 3)
-							for _, tag := range tags {
-								g.buffer.Line(fmt.Sprintf("- %s", tag), 3)
+					t, _ := g.GetToken(e, "router")
+
+					// Methods
+					if m, ok := g.TokenMeta(t, "method"); ok {
+						methods := g.ParseArray(m, trsEmpty)
+						for _, method := range methods {
+							g.buffer.Label(method, 2)
+							if t, ok := g.GetToken(e, "summary"); ok {
+								g.BufferTokenMeta(t, "value", "summary", 3)
 							}
-						}
+							if t, ok := g.GetToken(e, "id"); ok {
+								g.BufferTokenMeta(t, "value", "operationId", 3)
+							}
+							if t, ok := g.GetToken(e, "desc"); ok {
+								g.BufferTokenMeta(t, "value", "description", 3)
+							}
 
-						// Params
-						if params := g.GetTokens(e, "param"); len(params) > 0 {
-							g.ParamsSection(params, 3)
-						}
-
-						// Body
-						if body, ok := g.GetToken(e, "body"); ok {
-							if t, ok := g.GetToken(e, "accept"); ok {
-								if m, ok := g.TokenMeta(t, "value"); ok && len(m) > 0 {
-									mts := g.ParseArray(m, g.trs["accept"]["value"])
-									g.BodySection(body, mts, 3)
+							// Tags
+							if len(tags) > 0 {
+								g.buffer.Label("tags", 3)
+								for _, tag := range tags {
+									g.buffer.Line(fmt.Sprintf("- %s", tag), 3)
 								}
 							}
-						}
 
-						// Response
-						g.ResponseSection(index, e, 3)
+							// Params
+							if params := g.GetTokens(e, "param"); len(params) > 0 {
+								g.ParamsSection(params, 3)
+							}
+
+							// Body
+							if body, ok := g.GetToken(e, "body"); ok {
+								if t, ok := g.GetToken(e, "accept"); ok {
+									if m, ok := g.TokenMeta(t, "value"); ok && len(m) > 0 {
+										mts := g.ParseArray(m, g.trs["accept"]["value"])
+										g.BodySection(body, mts, 3)
+									}
+								}
+							}
+
+							// Response
+							g.ResponseSection(index, e, 3)
+						}
 					}
 				}
 			}
@@ -563,6 +585,21 @@ func (g *generator) ParseObject(name string, data []token.Token, depth int, isAr
 	}
 
 	return b.lines
+}
+
+// SiblingEndpoints found by the same url
+func (g *generator) SiblingEndpoints(url string, endpoints [][]token.Token) [][]token.Token {
+	found := make([][]token.Token, 0)
+	for _, e := range endpoints {
+		if t, ok := g.GetToken(e, "router"); ok {
+			if m, ok := g.TokenMeta(t, "url"); ok {
+				if m == url {
+					found = append(found, e)
+				}
+			}
+		}
+	}
+	return found
 }
 
 // BufferTokenMeta writes a key/value pair into the buffer

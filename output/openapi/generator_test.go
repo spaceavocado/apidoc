@@ -253,6 +253,53 @@ func TestGenerate(t *testing.T) {
 	if res != expected {
 		t.Errorf("Expected \"%s\", got \"%s\"", expected, res)
 	}
+
+	// Groupped endpoints
+	g.compCache = make(map[string][]string, 0)
+	g.Generate(
+		[]token.Token{
+			{
+				Key:  "ver",
+				Meta: map[string]string{"value": "1.0"},
+			},
+		},
+		[][]token.Token{
+			{
+				{
+					Key: "router",
+					Meta: map[string]string{
+						"url":    "/test",
+						"method": "get",
+					},
+				},
+			},
+			{
+				{
+					Key: "router",
+					Meta: map[string]string{
+						"url":    "/test",
+						"method": "post",
+					},
+				},
+			},
+		},
+		file)
+
+	expected = ""
+	expected += "info:\n"
+	expected += "  version: \"1.0\"\n"
+	expected += "paths:\n"
+	expected += "  /test:\n"
+	expected += "    get:\n"
+	expected += "      responses:\n"
+	expected += "    post:\n"
+	expected += "      responses:\n"
+	expected += "openapi: \"3.0.2\""
+
+	read()
+	if res != expected {
+		t.Errorf("Expected \"%s\", got \"%s\"", expected, res)
+	}
 }
 
 func TestMainSection(t *testing.T) {
