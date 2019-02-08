@@ -111,6 +111,27 @@ func newTrsArray() transformation {
 	}
 }
 
+// newTrsSafeValue prevents non-quoted yaml string
+// containing reserved characters
+func newTrsSafeValue() transformation {
+	reserved := regexp.MustCompile("[-\\?:,\\[\\]{}#&\\*!\\|>'\"%@`”]")
+	clean := regexp.MustCompile("\"{2,}")
+	escape := regexp.MustCompile("[^\\\\]\"")
+	return func(input string) string {
+		if reserved.MatchString(input) {
+			if input[:1] == "\"" {
+				input = input[1:]
+			}
+			if input[len(input)-1:] == "\"" {
+				input = input[:len(input)-1]
+			}
+			input = clean.ReplaceAllString(input, "\"")
+			return fmt.Sprintf("\"%s\"", escape.ReplaceAllString(input, "\\\""))
+		}
+		return input
+	}
+}
+
 // transformations
 var (
 	trsType         = newTrsType()
@@ -118,4 +139,5 @@ var (
 	trsQuote        = newTrsQuote()
 	trsSpecialChars = newTrsSpecialChars()
 	trsArray        = newTrsArray()
+	trsSafeValue    = newTrsSafeValue()
 )

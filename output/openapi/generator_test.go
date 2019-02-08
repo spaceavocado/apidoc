@@ -225,7 +225,7 @@ func TestGenerate(t *testing.T) {
 	expected += "  /sample:\n"
 	expected += "    get:\n"
 	expected += "      summary: sample\n"
-	expected += "      operationId: action-id\n"
+	expected += "      operationId: \"action-id\"\n"
 	expected += "      description: lorem\n"
 	expected += "      tags:\n"
 	expected += "      - Dolor\n"

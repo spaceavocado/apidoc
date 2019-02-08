@@ -214,7 +214,7 @@ func (g *generator) MainSection(main []token.Token) {
 		for _, t := range col {
 			if m, ok := t.Meta["value"]; ok {
 				name := strings.TrimPrefix(t.Key, "contact.")
-				g.buffer.KeyValue(name, m, 2)
+				g.buffer.KeyValue(name, trsSafeValue(m), 2)
 			}
 		}
 	}
@@ -225,7 +225,7 @@ func (g *generator) MainSection(main []token.Token) {
 		for _, t := range col {
 			if m, ok := t.Meta["value"]; ok {
 				name := strings.TrimPrefix(t.Key, "lic.")
-				g.buffer.KeyValue(name, m, 2)
+				g.buffer.KeyValue(name, trsSafeValue(m), 2)
 			}
 		}
 	}
@@ -257,7 +257,7 @@ func (g *generator) ParamsSection(params []token.Token, depth int) {
 				g.buffer.KeyValue("type", strings.TrimPrefix(m, "array "), depth+3)
 				// Regular type
 			} else {
-				g.buffer.KeyValue("type", m, depth+2)
+				g.buffer.KeyValue("type", trsSafeValue(m), depth+2)
 			}
 		}
 	}
@@ -546,7 +546,7 @@ func (g *generator) ParseObject(name string, data []token.Token, depth int, isAr
 			} else {
 				b.Label(t.Meta[g.nameMetaKey], depth+2)
 				if m, ok := t.Meta["desc"]; ok {
-					b.KeyValue("description", m, depth+3)
+					b.KeyValue("description", trsSafeValue(m), depth+3)
 				}
 
 				// Array type
@@ -569,7 +569,7 @@ func (g *generator) ParseObject(name string, data []token.Token, depth int, isAr
 // where value is the value of the meta prop
 func (g *generator) BufferTokenMeta(t token.Token, meta, key string, indent int) {
 	if m, ok := g.TokenMeta(t, meta); ok {
-		g.buffer.KeyValue(key, m, indent)
+		g.buffer.KeyValue(key, trsSafeValue(m), indent)
 	}
 }
 
