@@ -558,11 +558,16 @@ func (g *generator) ParseObject(name string, data []token.Token, depth int, isAr
 					// Flatten the inner ref props, so they will be
 					// threadted in deeper parsing as a local props
 					prefix := fmt.Sprintf("%s.", t.Meta[g.nameMetaKey])
+					reduced := make([]token.Token, 0)
 					for _, rt := range ref {
-						rt.Meta[g.nameMetaKey] = strings.TrimPrefix(rt.Meta[g.nameMetaKey], prefix)
+						// Take only the props with the same prefix, i.e. in the same object
+						if strings.HasPrefix(rt.Meta[g.nameMetaKey], prefix) {
+							rt.Meta[g.nameMetaKey] = strings.TrimPrefix(rt.Meta[g.nameMetaKey], prefix)
+							reduced = append(reduced, rt)
+						}
 					}
 					// Parse inner object props
-					b.lines = append(b.lines, g.ParseObject(t.Meta[g.nameMetaKey], ref, depth+2, metaArr)...)
+					b.lines = append(b.lines, g.ParseObject(t.Meta[g.nameMetaKey], reduced, depth+2, metaArr)...)
 				}
 				// Plain props
 			} else {
