@@ -472,6 +472,7 @@ func (r *resolver) ParseFile(pkg, file string) error {
 			lines := strings.Split(strings.Replace(ic[1], "\r\n", "\n", -1), "\n")
 			for _, l := range lines {
 				l = strings.TrimSpace(l)
+				l = strings.Replace(l, "_ \"", "\"", -1)
 				if l != "" {
 					chunks := strings.Split(l, " ")
 					if len(chunks) == 2 {

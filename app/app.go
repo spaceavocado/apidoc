@@ -14,7 +14,7 @@ import (
 
 const (
 	// Version of the APIDoc
-	Version string = "beta-0.3.4"
+	Version string = "beta-0.3.5"
 )
 
 // App main structure

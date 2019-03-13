@@ -7,6 +7,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/spaceavocado/apidoc/example/request"
 	"github.com/spaceavocado/apidoc/example/response"
+	// Common respose, structs referenced in the API documentation
+	_ "github.com/spaceavocado/apidoc/example/common"
 )
 
 // Person response model
@@ -28,6 +30,16 @@ type Status int
 // Handlers for this resource / API section
 func Handlers(r *mux.Router) {
 	// GetPerson handler
+	// @summary Person Address
+	// @desc Get person address.
+	// @id person-address
+	// @tag Person
+	// @produce json
+	// @success 200 {object} common.Address OK
+	// @failure 500 {string} Internal Server Error
+	r.HandleFunc("/person/{id:[0-9]+}/address", GetAddress).Methods("GET")
+
+	// GetPerson handler
 	// @summary Person
 	// @desc Get person by ID.
 	// @id person
@@ -37,7 +49,12 @@ func Handlers(r *mux.Router) {
 	// @failure 500 {string} Internal Server Error
 	r.HandleFunc("/person/{id:[0-9]+}", GetPerson).Methods("GET")
 
-	r.HandleFunc("/person", GetPerson).Methods("PUT")
+	r.HandleFunc("/person", CreatePerson).Methods("PUT")
+}
+
+// GetAddress request
+func GetAddress(w http.ResponseWriter, r *http.Request) {
+	// Not implemented
 }
 
 // GetPerson request
@@ -56,7 +73,7 @@ func GetPerson(w http.ResponseWriter, r *http.Request) {
 // CreatePerson handler
 // @summary Create
 // @desc Create a new Person
-// @id person
+// @id create-person
 // @tag Person
 // @accept json
 // @produce json
