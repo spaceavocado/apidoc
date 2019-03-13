@@ -129,6 +129,7 @@ func (e *extractor) parse(r *bufio.Reader, file string) ([]Block, error) {
 					// Gorilla mux subrouter
 				} else if m := e.gorillaMuxSubrouterRx.FindStringSubmatch(line); len(m) > 0 {
 					url := m[1]
+					url = e.pathCleanRx.ReplaceAllString(url, "")
 					blocks[len(blocks)-1].Lines = append(blocks[len(blocks)-1].Lines, fmt.Sprintf("routerurl %s", url))
 				}
 			}
